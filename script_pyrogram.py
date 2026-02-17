@@ -16,7 +16,7 @@ SESSION_STRING = "BAG5gJ4ATkUghix_319Sqpd5L9bo3nUE0IHDUmyHFosZpmbqgxeixpvacVO1zz
 N8N_WEBHOOK_URL = 'https://dani-n8n-n8n.yu6ww1.easypanel.host/webhook/f43f9869-cfdd-4e41-be6b-f7a361a581fd'
 
 # IDs de los grupos/chats que quieres monitorizar (añade todos los IDs que necesites)
-CHAT_ID_FILTERS = [-1003376832910, -1001872387914]  # Lista de IDs de grupos a monitorizar
+CHAT_ID_FILTERS = [-1003376832910, -1001872387914,1687976608 ]  # Lista de IDs de grupos a monitorizar
 
 # Crear el cliente usando SESSION_STRING
 app = Client("mi_sesion", session_string=SESSION_STRING)
