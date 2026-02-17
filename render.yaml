@@ -1,0 +1,9 @@
+services:
+  - type: worker
+    name: telegram-monitor
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python script_pyrogram.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0

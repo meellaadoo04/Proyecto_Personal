@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+
+# Archivos de sesión de Telegram
+*.session
+*.session-journal
+
+# Archivos locales
+get_session_string.py
+README_DEPLOY.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
