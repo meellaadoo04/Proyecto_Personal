@@ -44,7 +44,7 @@ async def handler(client, message):
                 sender_name = message.from_user.first_name
         
         # Obtener texto del mensaje
-        texto = message.text if message.text else "[Multimedia/Sin texto]"
+        texto = message.text if message.text else (message.caption if message.caption else "[Multimedia/Sin texto]")
         
         # Preparar datos para enviar al webhook
         payload = {
@@ -52,8 +52,18 @@ async def handler(client, message):
             "user": sender_name,
             "message": texto,
             "chat_id": message.chat.id,
-            "date": str(message.date)
+            "date": str(message.date),
+            "has_photo": False,
+            "photo_file_id": None
         }
+        
+        # Si el mensaje tiene foto, añadir información
+        if message.photo:
+            payload["has_photo"] = True
+            payload["photo_file_id"] = message.photo.file_id
+            payload["photo_width"] = message.photo.width
+            payload["photo_height"] = message.photo.height
+            print(f"📸 Foto detectada: {message.photo.file_id}")
         
         # Enviar al webhook de n8n
         response = requests.post(N8N_WEBHOOK_URL, json=payload)
