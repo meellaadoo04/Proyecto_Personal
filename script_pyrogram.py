@@ -1,6 +1,7 @@
 import asyncio
 import sys
 import os
+import tempfile
 
 # Configurar event loop para Python 3.14
 if sys.version_info >= (3, 14):
@@ -59,17 +60,38 @@ async def handler(client, message):
         
         # Si el mensaje tiene foto, añadir información
         if message.photo:
-            # Obtener la URL de la foto
-            file = await client.download_media(message.photo, in_memory=True)
-            # Construir URL pública de Telegram para la foto
-            photo_url = f"https://api.telegram.org/file/bot{SESSION_STRING}/{message.photo.file_id}"
-            
-            payload["has_photo"] = True
-            payload["photo_file_id"] = message.photo.file_id
-            payload["photo_url"] = photo_url
-            payload["photo_width"] = message.photo.width
-            payload["photo_height"] = message.photo.height
-            print(f"📸 Foto detectada: {photo_url}")
+            try:
+                # Descargar la foto temporalmente
+                photo_path = await message.download(file_name=tempfile.mktemp(suffix=".jpg"))
+                print(f"📥 Descargando foto...")
+                
+                # Subir a file.io (servicio temporal gratuito - 1 descarga única)
+                with open(photo_path, 'rb') as f:
+                    files = {'file': f}
+                    upload_response = requests.post('https://file.io', files=files)
+                    
+                    if upload_response.status_code == 200:
+                        upload_data = upload_response.json()
+                        if upload_data.get('success'):
+                            photo_url = upload_data.get('link')
+                            
+                            payload["has_photo"] = True
+                            payload["photo_file_id"] = message.photo.file_id
+                            payload["photo_url"] = photo_url
+                            payload["photo_width"] = message.photo.width
+                            payload["photo_height"] = message.photo.height
+                            print(f"✅ Foto subida: {photo_url}")
+                        else:
+                            print(f"❌ Error en respuesta de file.io")
+                    else:
+                        print(f"❌ Error al subir foto: {upload_response.status_code}")
+                
+                # Eliminar archivo temporal
+                if os.path.exists(photo_path):
+                    os.remove(photo_path)
+                    
+            except Exception as e:
+                print(f"❌ Error procesando foto: {e}")
         
         # Enviar al webhook de n8n
         response = requests.post(N8N_WEBHOOK_URL, json=payload)
