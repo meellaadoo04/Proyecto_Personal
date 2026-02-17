@@ -59,11 +59,17 @@ async def handler(client, message):
         
         # Si el mensaje tiene foto, añadir información
         if message.photo:
+            # Obtener la URL de la foto
+            file = await client.download_media(message.photo, in_memory=True)
+            # Construir URL pública de Telegram para la foto
+            photo_url = f"https://api.telegram.org/file/bot{SESSION_STRING}/{message.photo.file_id}"
+            
             payload["has_photo"] = True
             payload["photo_file_id"] = message.photo.file_id
+            payload["photo_url"] = photo_url
             payload["photo_width"] = message.photo.width
             payload["photo_height"] = message.photo.height
-            print(f"📸 Foto detectada: {message.photo.file_id}")
+            print(f"📸 Foto detectada: {photo_url}")
         
         # Enviar al webhook de n8n
         response = requests.post(N8N_WEBHOOK_URL, json=payload)
