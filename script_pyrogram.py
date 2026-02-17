@@ -9,11 +9,8 @@ if sys.version_info >= (3, 14):
 from pyrogram import Client
 import requests
 
-# Obtener SESSION_STRING de variables de entorno
-SESSION_STRING = os.getenv('SESSION_STRING')
-
-if not SESSION_STRING:
-    raise ValueError("❌ SESSION_STRING no está configurado en las variables de entorno")
+# Session string hardcodeado
+SESSION_STRING = "BAG5gJ4ATkUghix_319Sqpd5L9bo3nUE0IHDUmyHFosZpmbqgxeixpvacVO1zz31pfjjCHFVZvAK_d9zoPlIc0CYU_IUUGR8gQDw9V21uIGCC7hfLNuBaFHkqccqC-VMbDO00I-1XSEH3jXqkP4uIUKndH_XGKGflprDpAoTBGQqr5JY9sLY3WoYVzVyO1at434IuaFy9aBMm6aXUiZbq4foG-l8gqJr0x4JvTDFGnrBqp8BnDtE9Sf68mTj2ZfGlJchKPut9vQwU9zExjHmhpAKRpMJdenlLZEyc9HIEk1p5CaK0HLmss4pJPUVONurImWTVQ-aKwt6R5xTFS8o3OqyXcCBgAAAAAAyiT0nAA"
 
 # URL del webhook de n8n
 N8N_WEBHOOK_URL = 'https://dani-n8n-n8n.yu6ww1.easypanel.host/webhook/f43f9869-cfdd-4e41-be6b-f7a361a581fd'
